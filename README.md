@@ -16,3 +16,13 @@
 -Post
 -Put
 -Del
+
+
+# Architecture of FastAPI application
+--Model
+--Router
+--Controller
+--Service
+--Repositor
+--Middleware
+--Schema
