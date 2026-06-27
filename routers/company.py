@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from schemas.company import CompanyCreate,CompanyUpdate,CompanyDelete
+from models import company
+from schemas.company import CompanyCreate,CompanyUpdate
 
 
 router=APIRouter(prefix="/company",tags=["company"])
@@ -26,8 +27,8 @@ def update_company(company_id:int,company:CompanyUpdate):
     return companies
 
 @router.delete("/{company_id}")
-def delete_company(company_id:int,company:CompanyDelete):
-    companies[company_id]=company
+def delete_company(company_id:int):
+    companies.pop(company_id)
     return companies
 
 

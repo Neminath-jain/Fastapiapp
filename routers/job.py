@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from schemas.job import JobCreate,JobUpdate,JobDelete
+from schemas.job import JobCreate,JobUpdate
 
 
 router=APIRouter(prefix="/job",tags=["job"])
@@ -8,7 +8,7 @@ jobs=[]
 @router.post("/")
 def create_job(job:JobCreate):
     jobs.append(job)
-    return jobs
+    return job
 
 
 @router.get("/")
@@ -32,6 +32,7 @@ def update_job(job_id:int,job:JobUpdate):
     return jobs
 
 @router.delete("/{job_id}")
-def delete_job(job_id:int,job:JobDelete):
-    jobs[job_id]=job
+def delete_job(job_id:int):
+    jobs.pop(job_id)
     return jobs
+
