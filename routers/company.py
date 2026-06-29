@@ -26,17 +26,27 @@ def gel_all_company(db: Session = Depends(get_db)):
 
 @router.get("/{company_id}",status_code=status.HTTP_200_OK, response_model=CompanyResponse)
 def get_company(company_id:int,db:Session=Depends(get_db)):
-    return db.query(Company).filter(Company.id == company_id).first()
+    company = db.query(Company).filter(Company.id == company_id).first()
+    if not company:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Company not found")
+    return company
 
 @router.put("/{company_id}", status_code=status.HTTP_202_ACCEPTED, response_model=CompanyResponse)
 def update_company(company_id: int,company: CompanyUpdate,db: Session = Depends(get_db)):
- db_company = db.query(Company).filter(Company.id == company_id).first()
- return db_company
+    db_company = db.query(Company).filter(Company.id == company_id).first()
+    if not db_company:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Company not found")
+    for key, value in company.dict(exclude_unset=True).items():
+        setattr(db_company, key, value)
+    db.commit()
+    db.refresh(db_company)
+    return db_company
 
- 
 @router.delete("/{company_id}",status_code=status.HTTP_204_NO_CONTENT)
 def delete_company(company_id:int,db:Session=Depends(get_db)):
     db_company = db.query(Company).filter(Company.id == company_id).first()
+    if not db_company:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Company not found")
     db.delete(db_company)
     db.commit()
     return db_company
