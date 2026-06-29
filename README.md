@@ -25,4 +25,14 @@
 --Service  
 --Repositor  
 --Middleware  
---Schema  
+--Schem  
+
+## models
+alembic ---- database migration
+
+
+
+# concepts
+pip install alembic
+alembic init alembic
+
