@@ -33,6 +33,17 @@ alembic ---- database migration
 
 
 # concepts
+# Concepts:
+
 pip install alembic
+
 alembic init alembic
 
+alembic -> env.py -> from imported model -> metadata data
+
+alembic.ini -> sqlalchemy.url = postgres url
+--> postgresql://user:password@host:port/database_name
+
+alembic revision --autogenerate -m "initial migration"
+
+alembic upgrade head
