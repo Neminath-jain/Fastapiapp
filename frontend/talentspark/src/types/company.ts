@@ -3,7 +3,7 @@ interface Company {
   id: string;
   name: string;
   email: string;
-  phone: string;
+  phone_number: string;
   location: string;
   jobs: Job[];
 }

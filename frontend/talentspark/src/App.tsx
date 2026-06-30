@@ -43,10 +43,7 @@ function App(){
       <Navbar />
       <Welcome />
       <br />
-      <Footer />
-      {companies.map((company) => (
-        <CompanyCard key={company.id}/>
-      ))}
+        <CompanyCard companies={companies} />
       <JobCard />
       <Footer />
     </div>
