@@ -47,3 +47,7 @@ alembic.ini -> sqlalchemy.url = postgres url
 alembic revision --autogenerate -m "initial migration"
 
 alembic upgrade head
+
+
+
+

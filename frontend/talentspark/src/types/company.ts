@@ -1,6 +1,6 @@
 import type { Job } from './job';
 interface Company {
-  id: string;
+  id: number;
   name: string;
   email: string;
   phone_number: string;

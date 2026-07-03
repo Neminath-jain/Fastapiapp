@@ -13,3 +13,6 @@ the data from the api automatically when the page is loaded
 
 useState- which is used to store the data in the component and which
 will update the component when the data is updated or changed
+
+
+promise ---which is used to handle the asynchronous operations in a synchronous way
