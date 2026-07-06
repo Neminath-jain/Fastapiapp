@@ -1,3 +1,9 @@
 *.pyc
 env
 node_modules
+
+*.pyc
+env
+node_modules
+backend/.env
+.env
