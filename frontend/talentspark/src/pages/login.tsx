@@ -3,10 +3,9 @@ import { login } from "../Services/AuthService";
 
 type Props = {
   onLogin: (token: string) => void;
-  onSwitchToRegister?: () => void;
 };
 
-function Login({ onLogin, onSwitchToRegister }: Props) {
+function Login({ onLogin }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -41,14 +40,6 @@ function Login({ onLogin, onSwitchToRegister }: Props) {
       />
       <br />
       <button type="submit">Login</button>
-      {onSwitchToRegister && (
-        <p>
-          Don't have an account?{" "}
-          <button type="button" onClick={onSwitchToRegister}>
-            Register
-          </button>
-        </p>
-      )}
     </form>
   );
 }

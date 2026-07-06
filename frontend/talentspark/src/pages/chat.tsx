@@ -1,41 +1,37 @@
 import { useState, type FormEvent } from "react";
 import { sendChatMessage } from "../Services/chatservices";
-import type { ChatResponse } from "../types/chat";
+import type { ChatRequest } from "../types/chat";
 
-type Props = { token: string };
-
-function Chat({ token }: Props) {
+function ChatPage() {
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!message.trim()) return;
-
     try {
-      const result = await sendChatMessage(message, token);
-      setReply(result.reply);
+      const body: ChatRequest = { message, session_id: sessionId ?? undefined };
+      const res = await sendChatMessage(body);
+      setReply(res.reply);
+      setSessionId(res.session_id);
       setMessage("");
-    } catch (error) {
-      console.error(error);
-      alert("Chat error");
+    } catch (err) {
+      console.error(err);
+      alert("Chat request failed");
     }
   };
 
   return (
     <div>
-      <h2>Chat</h2>
+      <h2>Chatbot</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type a message"
-        />
+        <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Ask something..." />
         <button type="submit">Send</button>
       </form>
-      {reply && <p>Reply: {reply}</p>}
+      {reply && <div><strong>Reply:</strong> <p>{reply}</p></div>}
     </div>
   );
 }
 
-export default Chat;
+export default ChatPage;
