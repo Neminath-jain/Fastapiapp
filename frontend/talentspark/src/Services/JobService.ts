@@ -1,30 +1,27 @@
-import axios from 'axios';
-import type {Company} from '../types/company';
-import type { Job } from '../types/job';
-const API_BASE_URL = 'http://localhost:8000';
+import axios from "axios";
+import type { Job } from "../types/job";
 
+const API_BASE_URL = "http://localhost:8000";
 
-export async function getJobs(): Promise<Job[]> {
-  const response = await axios.get(`${API_BASE_URL}/job`);
-  return response.data();
+const authHeaders = (token: string) => ({
+  headers: { Authorization: `Bearer ${token}` },
+});
 
-}
-export async function getJob(id: number): Promise<Job> {
-  const response = await axios.get(`${API_BASE_URL}/job/${id}`);
-  return response.data();
+export async function getJobs(token: string): Promise<Job[]> {
+  const resp = await axios.get<Job[]>(`${API_BASE_URL}/job`, authHeaders(token));
+  return resp.data;
 }
 
-export async function createJob(job: Job): Promise<Job> {
-  const response = await axios.post(`${API_BASE_URL}/job `, job);
-  return response.data();
+export async function createJob(job: Job, token: string): Promise<Job> {
+  const resp = await axios.post<Job>(`${API_BASE_URL}/job`, job, authHeaders(token));
+  return resp.data;
 }
 
-export async function updateJob(id: number, job: Job): Promise<Job> {
-  const response = await axios.put(`${API_BASE_URL}/job/${id}`, job);
-  return response.data();
+export async function updateJob(id: number, job: Job, token: string): Promise<Job> {
+  const resp = await axios.put<Job>(`${API_BASE_URL}/job/${id}`, job, authHeaders(token));
+  return resp.data;
 }
 
-export async function deleteJob(id: number): Promise<Job> {
-  const response = await axios.delete(`${API_BASE_URL}/job/${id}`);
-  return response.data();
+export async function deleteJob(id: number, token: string): Promise<void> {
+  await axios.delete(`${API_BASE_URL}/job/${id}`, authHeaders(token));
 }

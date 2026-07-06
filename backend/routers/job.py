@@ -19,7 +19,7 @@ def create_job(job:JobCreate, db:Session=Depends(get_db),current_user=Depends(ro
 
 
 @router.get("/",status_code=status.HTTP_200_OK)
-def gel_all_job(db: Session = Depends(get_db), current_user=Depends(role_required(["get_current_user"]))):
+def get_all_jobs(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     jobs = db.query(Job).all()
     return jobs
     
