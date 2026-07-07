@@ -1,13 +1,13 @@
 import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from services.qdrant_service import search_jobs
 
 load_dotenv()
 
 llm = ChatGroq(
-    model="llama3-70b-8192",
+    model="llama-3.3-70b-versatile",
     temperature=0,
     groq_api_key=os.getenv("GROQ_API_KEY")
 )
@@ -22,7 +22,6 @@ Retrieved Jobs:
 ])
 
 rag_chain = rag_prompt | llm
-
 def rag_job_search(query: str) -> str:
     results = search_jobs(query, top_k=5)
     if not results:
@@ -30,5 +29,5 @@ def rag_job_search(query: str) -> str:
     context="\n".join([
         f"-{r['title']} (Salary: {r['salary']})\n{r['description']}" for r in results
     ])
-    response = rag_chain.invoke({"context": context, "question": question})
+    response = rag_chain.invoke({"context": context, "question": query})
     return response.content

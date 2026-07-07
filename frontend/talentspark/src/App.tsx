@@ -1,148 +1,174 @@
-import { useEffect, useState } from "react";
 import NavBar from "./components/NavBar";
 import CompanyCard from "./components/CompanyCard";
 import JobCard from "./components/JobCard";
 import Footer from "./components/Footer";
+import { useEffect, useState } from "react";
+import { getCompanies, updateCompany, deleteCompany, createCompany } from "./Services/CompanyService";
+import { getJobs, updateJob, deleteJob, createJob } from "./Services/JobService";
+import type { Company } from "./types/company"
+import type { Job } from "./types/job"
 import Login from "./pages/login";
-import ChatPage from "./pages/chat";
-import {
-  getCompanies,
-  updateCompany,
-  deleteCompany,
-  createCompany,
-} from "./Services/CompanyService";
-import { getJobs, createJob, updateJob, deleteJob } from "./Services/JobService";
-import type { Company } from "./types/company";
-import type { Job } from "./types/job";
+import Register from "./pages/register";
+import Chat from "./pages/chat";
+import ResumeAnalyser from "./pages/ResumeAnalyser";
+import JobMatch from "./pages/JobMatch";
+
 
 function App() {
-  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<Error | null>(null)
   const [companies, setCompanies] = useState<Company[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+  const [page, setPage] = useState<"login" | "register">("login");
+  const [currentPage, setCurrentPage] = useState("home");
 
-  async function fetchCompanies() {
-    if (!token) return;
+  const handleLogin = (newToken: string) => {
+    localStorage.setItem("token", newToken);
+    setToken(newToken);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+    setCurrentPage("home");
+  };
+
+  async function fetchData() {
     setLoading(true);
     try {
-      const companies = await getCompanies(token);
-      setCompanies(companies);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err : new Error(String(err)));
+      const [companiesData, jobsData] = await Promise.all([
+        getCompanies(token!),
+        getJobs(token!)
+      ]);
+      setCompanies(companiesData);
+      setJobs(jobsData);
+    } catch (error) {
+      setError(error as Error);
     } finally {
       setLoading(false);
     }
   }
 
-  async function fetchJobs() {
-    if (!token) return;
-    try {
-      const data = await getJobs(token);
-      setJobs(data);
-    } catch (err: unknown) {
-      console.error(err);
-    }
-  }
-
-  useEffect(() => {
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-    fetchCompanies();
-    fetchJobs();
-  }, [token]);
-
   async function handleEdit(company: Company) {
     try {
       const updatedCompany = await updateCompany(company.id, company, token!);
-      setCompanies(companies.map((item) => (item.id === updatedCompany.id ? updatedCompany : item)));
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err : new Error(String(err)));
+      setCompanies(prev =>
+        prev.map(company =>
+          company.id === updatedCompany.id ? updatedCompany : company
+        )
+      );
+    } catch (error) {
+      setError(error as Error);
     }
   }
 
   async function handleDelete(id: number) {
     try {
       await deleteCompany(id, token!);
-      setCompanies(companies.filter((company) => company.id !== id));
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err : new Error(String(err)));
+      setCompanies(prev =>
+        prev.filter(company => company.id !== id)
+      );
+    } catch (error) {
+      setError(error as Error);
     }
   }
 
   async function handleAdd(company: Company) {
     try {
       const newCompany = await createCompany(company, token!);
-      setCompanies([...companies, newCompany]);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err : new Error(String(err)));
-    }
-  }
-
-  async function handleJobAdd(job: Job) {
-    try {
-      const newJob = await createJob(job, token!);
-      setJobs([...jobs, newJob]);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err : new Error(String(err)));
+      setCompanies(prev => [...prev, newCompany]);
+    } catch (error) {
+      setError(error as Error);
     }
   }
 
   async function handleJobEdit(job: Job) {
     try {
-      const updated = await updateJob(job.id, job, token!);
-      setJobs(jobs.map((j) => (j.id === updated.id ? updated : j)));
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err : new Error(String(err)));
+      const updatedJob = await updateJob(job.id, job, token!);
+      setJobs(prev =>
+        prev.map(j =>
+          j.id === updatedJob.id ? updatedJob : j
+        )
+      );
+    } catch (error) {
+      setError(error as Error);
     }
   }
 
   async function handleJobDelete(id: number) {
     try {
       await deleteJob(id, token!);
-      setJobs(jobs.filter((j) => j.id !== id));
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err : new Error(String(err)));
+      setJobs(prev =>
+        prev.filter(job => job.id !== id)
+      );
+    } catch (error) {
+      setError(error as Error);
     }
   }
 
-  const handleLogin = (newToken: string) => {
-    setToken(newToken);
-    setError(null);
-  };
+  async function handleJobAdd(job: Job) {
+    try {
+      const newJob = await createJob(job, token!);
+      setJobs(prev => [...prev, newJob]);
+    } catch (error) {
+      setError(error as Error);
+    }
+  }
 
-  const handleLogout = () => {
-    setToken(null);
-    setCompanies([]);
-    setJobs([]);
-    setError(null);
-  };
+
+  useEffect(() => {
+    if (token) {
+      fetchData();
+    }
+  }, [token]);
 
   if (!token) {
-    return <Login onLogin={handleLogin} />;
+    return (
+      <>
+        {page === "login" ? (
+          <Login onLogin={handleLogin} onSwitchToRegister={() => setPage("register")} />
+        ) : (
+          <Register onSwitchToLogin={() => setPage("login")} />
+        )}
+      </>
+    )
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div>Error: {error.message}</div>
   }
-
   return (
     <>
-      <NavBar />
-      <button onClick={handleLogout}>Logout</button>
-      <br />
-      <CompanyCard companies={companies} onedit={handleEdit} ondelete={handleDelete} onadd={handleAdd} />
-      <ChatPage />
-      <JobCard jobs={jobs} onAdd={handleJobAdd} onEdit={handleJobEdit} onDelete={handleJobDelete} />
+      <NavBar currentPage={currentPage} onNavigate={setCurrentPage} onLogout={handleLogout} />
+      {currentPage === "home" && (
+        <>
+          <CompanyCard
+            companies={companies}
+            jobs={jobs}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onAdd={handleAdd}
+          />
+          <JobCard
+            jobs={jobs}
+            companies={companies}
+            onEdit={handleJobEdit}
+            onDelete={handleJobDelete}
+            onAdd={handleJobAdd}
+          />
+        </>
+      )}
+      {currentPage === "chat" && <Chat />}
+      {currentPage === "resume" && <ResumeAnalyser />}
+      {currentPage === "jobmatch" && <JobMatch />}
       <Footer />
     </>
-  );
+  )
 }
 
-export default App;
+export default App
