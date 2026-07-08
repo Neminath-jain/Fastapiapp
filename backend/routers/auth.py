@@ -39,9 +39,8 @@ async def register(user:UserCreate,db:AsyncSession = Depends(get_db)):
 @router.post("/login",response_model=Token)
 async def login(form_data:OAuth2PasswordRequestForm=Depends(),db:AsyncSession = Depends(get_db)):
     try:
-        result =await db.execute(select(User).filter(User.email==form_data.username))
+        result = await db.execute(select(User).filter(User.email==form_data.username))
         existing_user = result.scalars().first()
-        existing_user=db.query(User).filter(User.email==form_data.username).first()
         if not existing_user:
           raise HTTPException(status_code=404,detail="User not found")
         if not verify_password(form_data.password,existing_user.hashed_password):
