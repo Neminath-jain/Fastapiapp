@@ -7,7 +7,6 @@ from database import get_db
 from utils.oauth2 import role_required,get_current_user
 
 router=APIRouter(prefix="/job",tags=["job"])
-jobs=[]
 
 @router.post("/",status_code=status.HTTP_201_CREATED)
 def create_job(job:JobCreate, db:Session=Depends(get_db),current_user=Depends(role_required(["admin","hr"]))):

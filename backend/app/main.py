@@ -5,6 +5,8 @@ from database import Base,engine
 from models import company as company_model,job as job_model, users as user_model
 from fastapi.middleware.cors import CORSMiddleware
 from routers.chat import router as chat_router
+from database import engine
+
 
 app=FastAPI()
 app.add_middleware(
@@ -14,6 +16,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.on_event("startup")
+async def startup_event():
+     from database import engine
+     async with engine.begin() as conn:
+         await conn.run_sync(Base.metadata.create_all)
+
 print("engine is",engine)
 # Base.metadata.create_all(bind=engine)
 app.include_router(chat_router, prefix="/chatbot", tags=["Chatbot"])
