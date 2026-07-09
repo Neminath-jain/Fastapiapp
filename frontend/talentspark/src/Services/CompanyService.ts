@@ -8,24 +8,17 @@ const authHeaders = (token: string) => ({
 });
 
 export async function getCompanies(token: string): Promise<Company[]> {
-  const response = await axios.get<Company[]>(`${API_BASE_URL}/company`, authHeaders(token));
+  const response = await axios.get<Company[]>(`${API_BASE_URL}/company/`, authHeaders(token));
   return response.data;
 }
 
 export async function getCompany(id: number, token: string): Promise<Company> {
-  const response = await axios.get<Company>(
-    `${API_BASE_URL}/company/${id}`,
-    authHeaders(token)
-  );
+  const response = await axios.get<Company>(`${API_BASE_URL}/company/${id}/`, authHeaders(token));
   return response.data;
 }
 
 export async function createCompany(company: Company, token: string): Promise<Company> {
-  const response = await axios.post<Company>(
-    `${API_BASE_URL}/company`,
-    company,
-    authHeaders(token)
-  );
+  const response = await axios.post<Company>(`${API_BASE_URL}/company/`, company, authHeaders(token));
   return response.data;
 }
 
@@ -34,14 +27,10 @@ export async function updateCompany(
   company: Company,
   token: string
 ): Promise<Company> {
-  const response = await axios.put<Company>(
-    `${API_BASE_URL}/company/${id}`,
-    company,
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
+  const response = await axios.put<Company>(`${API_BASE_URL}/company/${id}/`, company, authHeaders(token));
   return response.data;
 }
 
 export async function deleteCompany(id: number, token: string): Promise<void> {
-  await axios.delete(`${API_BASE_URL}/company/${id}`, authHeaders(token));
+  await axios.delete(`${API_BASE_URL}/company/${id}/`, authHeaders(token));
 }

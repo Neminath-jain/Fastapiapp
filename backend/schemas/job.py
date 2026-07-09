@@ -18,11 +18,11 @@ class JobUpdate(JobBase):
     company_id: Optional[int] = None
 
 class JobResponse(JobBase):
-    id:int
-    company_id:int
+    id: int
+    company_id: Optional[int] = None
 
     class Config:
-        from_attributes=True
+        from_attributes = True
 
 
 
