@@ -1,15 +1,14 @@
-from sqlalchemy import Column, Integer, String,Enum,ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from database import Base,engine,SessionLocal
-
-
+from database import Base
 
 class Job(Base):
     __tablename__ = "jobs"
+
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False, index=True)
     description = Column(String)
-    salary = Column(String)
+    salary = Column(Integer)   # ✅ Changed
     company_id = Column(Integer, ForeignKey("companies.id"))
+
     company = relationship("Company", back_populates="jobs")
-    #address = Column(String, unique=True)
