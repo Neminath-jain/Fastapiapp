@@ -10,7 +10,6 @@ load_dotenv()
 
 # Use a plain default string as the second arg to getenv
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:admin123@localhost:5432/student_db")
-print(DATABASE_URL)
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+asyncpg://", 1)
 
