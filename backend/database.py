@@ -9,9 +9,11 @@ import os
 load_dotenv()
 
 # Use a plain default string as the second arg to getenv
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:admin123@localhost:5432/student_db")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:admin123@localhost:5432/student_db").strip()
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+asyncpg://", 1)
+elif DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
 
 # Supabase requires SSL but the asyncpg driver doesn't support the "?sslmode" URL text.
 # We split the URL to remove the query parameters, and pass ssl="require" instead.
