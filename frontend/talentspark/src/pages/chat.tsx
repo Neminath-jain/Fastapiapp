@@ -38,7 +38,7 @@ function Chat() {
         <div className="page-container" style={{ marginTop: '2rem' }}>
             <h2>Career Chat</h2>
             <div className="card" style={{ display: 'flex', flexDirection: 'column', height: '60vh' }}>
-                <div style={{ flex: 1, overflowY: "auto", padding: "1rem", display: 'flex', flexDirection: 'column' }}>
+                <div style={{ flex: 1, overflowY: "auto", padding: "1rem", display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                     {messages.length === 0 && (
                         <div style={{ margin: 'auto', color: 'var(--text)', textAlign: 'center' }}>
                             <p style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Ask me anything about your career!</p>

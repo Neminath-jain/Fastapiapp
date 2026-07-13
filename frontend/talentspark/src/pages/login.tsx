@@ -28,21 +28,22 @@ function Login({ onLogin, onSwitchToRegister }: Props) {
     }
 
     return (
-        <div className="auth-screen">
-            <div className="auth-box">
-                <div className="auth-mark">TS</div>
 
-                <h1 className="auth-heading">Sign in to TalentSpark</h1>
-                <p className="auth-sub">Enter your credentials to access your workspace.</p>
+        <div className="ts-auth-screen">
+            <div className="ts-auth-box">
+                <div className="ts-auth-mark">TS</div>
 
-                {error && <div className="auth-error">{error}</div>}
+                <h1 className="ts-auth-heading">Welcome back</h1>
+                <p className="ts-auth-sub">Sign in to your TalentSpark workspace.</p>
 
-                <form className="auth-form" onSubmit={handleSubmit}>
-                    <div className="auth-field">
-                        <label className="auth-label" htmlFor="email">Email address</label>
+                {error && <div className="ts-auth-error">{error}</div>}
+
+                <form className="ts-auth-form" onSubmit={handleSubmit}>
+                    <div className="ts-auth-field">
+                        <label className="ts-auth-label" htmlFor="email">Email address</label>
                         <input
                             id="email"
-                            className="auth-input"
+                            className="ts-auth-input"
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -52,14 +53,14 @@ function Login({ onLogin, onSwitchToRegister }: Props) {
                         />
                     </div>
 
-                    <div className="auth-field">
-                        <div className="auth-label-row">
-                            <label className="auth-label" htmlFor="password">Password</label>
-                            <button className="auth-forgot" type="button">Forgot?</button>
+                    <div className="ts-auth-field">
+                        <div className="ts-auth-label-row">
+                            <label className="ts-auth-label" htmlFor="password">Password</label>
+                            <button className="ts-auth-forgot" type="button">Forgot password?</button>
                         </div>
                         <input
                             id="password"
-                            className="auth-input"
+                            className="ts-auth-input"
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -68,21 +69,21 @@ function Login({ onLogin, onSwitchToRegister }: Props) {
                             required
                         />
                     </div>
-
-                    <button className="auth-submit" type="submit" disabled={loading}>
+                    <div className="m-stripe" style={{ margin: "4px 0 16px" }} />
+                    <button className="ts-auth-submit" type="submit" disabled={loading}>
                         {loading ? "Signing in…" : "Sign in"}
                     </button>
                 </form>
 
-                <p className="auth-switch">
+                <p className="ts-auth-switch">
                     Don't have an account?{" "}
-                    <button className="auth-link" type="button" onClick={onSwitchToRegister}>
+                    <button className="ts-auth-link" type="button" onClick={onSwitchToRegister}>
                         Create one
                     </button>
                 </p>
             </div>
 
-            <p className="auth-footer">© 2026 TalentSpark. All rights reserved.</p>
+            <p className="ts-auth-footer">© 2026 TalentSpark. All rights reserved.</p>
         </div>
     )
 }

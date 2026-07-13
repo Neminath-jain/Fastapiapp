@@ -29,21 +29,21 @@ function Register({ onSwitchToLogin }: Props) {
     }
 
     return (
-        <div className="auth-screen">
-            <div className="auth-box">
-                <div className="auth-mark">TS</div>
+        <div className="ts-auth-screen">
+            <div className="ts-auth-box">
+                <div className="ts-auth-mark">TS</div>
 
-                <h1 className="auth-heading">Create your account</h1>
-                <p className="auth-sub">Set up your workspace to start managing hires.</p>
+                <h1 className="ts-auth-heading">Create your account</h1>
+                <p className="ts-auth-sub">Set up your workspace to start managing hires.</p>
 
-                {error && <div className="auth-error">{error}</div>}
+                {error && <div className="ts-auth-error">{error}</div>}
 
-                <form className="auth-form" onSubmit={handleSubmit}>
-                    <div className="auth-field">
-                        <label className="auth-label" htmlFor="name">Full name</label>
+                <form className="ts-auth-form" onSubmit={handleSubmit}>
+                    <div className="ts-auth-field">
+                        <label className="ts-auth-label" htmlFor="name">Full name</label>
                         <input
                             id="name"
-                            className="auth-input"
+                            className="ts-auth-input"
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
@@ -53,11 +53,11 @@ function Register({ onSwitchToLogin }: Props) {
                         />
                     </div>
 
-                    <div className="auth-field">
-                        <label className="auth-label" htmlFor="email">Email address</label>
+                    <div className="ts-auth-field">
+                        <label className="ts-auth-label" htmlFor="email">Email address</label>
                         <input
                             id="email"
-                            className="auth-input"
+                            className="ts-auth-input"
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -67,11 +67,11 @@ function Register({ onSwitchToLogin }: Props) {
                         />
                     </div>
 
-                    <div className="auth-field">
-                        <label className="auth-label" htmlFor="password">Password</label>
+                    <div className="ts-auth-field">
+                        <label className="ts-auth-label" htmlFor="password">Password</label>
                         <input
                             id="password"
-                            className="auth-input"
+                            className="ts-auth-input"
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -81,11 +81,11 @@ function Register({ onSwitchToLogin }: Props) {
                         />
                     </div>
 
-                    <div className="auth-field">
-                        <label className="auth-label" htmlFor="role">Role</label>
+                    <div className="ts-auth-field">
+                        <label className="ts-auth-label" htmlFor="role">Role</label>
                         <select
                             id="role"
-                            className="auth-input auth-select"
+                            className="ts-auth-input ts-auth-select"
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
                             required
@@ -96,21 +96,22 @@ function Register({ onSwitchToLogin }: Props) {
                             <option value="admin">Admin</option>
                         </select>
                     </div>
-
-                    <button className="auth-submit" type="submit" disabled={loading}>
+                    <div className="m-stripe" style={{ margin: "4px 0 16px" }} />
+                    <button className="ts-auth-submit" type="submit" disabled={loading}>
+                    
                         {loading ? "Creating account…" : "Create account"}
                     </button>
                 </form>
 
-                <p className="auth-switch">
+                <p className="ts-auth-switch">
                     Already have an account?{" "}
-                    <button className="auth-link" type="button" onClick={onSwitchToLogin}>
+                    <button className="ts-auth-link" type="button" onClick={onSwitchToLogin}>
                         Sign in
                     </button>
                 </p>
             </div>
 
-            <p className="auth-footer">© 2026 TalentSpark. All rights reserved.</p>
+            <p className="ts-auth-footer">© 2026 TalentSpark. All rights reserved.</p>
         </div>
     )
 }
